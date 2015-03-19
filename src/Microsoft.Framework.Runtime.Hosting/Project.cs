@@ -12,6 +12,8 @@ namespace Microsoft.Framework.Runtime
 {
     public class Project
     {
+        public static readonly TypeInformation DefaultCompiler = new TypeInformation("Microsoft.Framework.Runtime.Compilation.Roslyn", "Microsoft.Framework.Runtime.Compilation.Roslyn.RoslynProjectCompiler");
+
         public Project(PackageSpec packageSpec)
         {
             BaseDirectory = Path.GetDirectoryName(packageSpec.FilePath);
@@ -29,6 +31,18 @@ namespace Microsoft.Framework.Runtime
                     Commands[command.Key] = command.Value.Value<string>();
                 }
             }
+
+            var languageInfo = Metadata.Properties["language"] as JObject;
+
+            if (languageInfo != null)
+            {
+                var languageName = languageInfo.GetValue<string>("name") ?? "C#";
+                var languageServicesAssembly = languageInfo.GetValue<string>("assembly");
+                var compilerType = languageInfo.GetValue<string>("compilerType");
+
+                Language = new LanguageServices(languageName,
+                    new TypeInformation(languageServicesAssembly, compilerType));
+            }
         }
 
         public string BaseDirectory { get; }
@@ -38,6 +52,7 @@ namespace Microsoft.Framework.Runtime
         public ProjectFilesCollection Files { get; }
         public PackageSpec Metadata { get; }
         public string EntryPoint { get; }
+        public LanguageServices Language { get; }
         public IDictionary<string, string> Commands { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     }
 }

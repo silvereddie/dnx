@@ -1,9 +1,9 @@
 ﻿{
     "version": "1.0.0-*",
-    "description": "Contains components for loading .NET assemblies from source by compiling on-demand",
+    "description": "Contains components for using the Roslyn C# compiler to compile projects in-memory",
     "dependencies": {
-        "Microsoft.Framework.Runtime.Hosting": "1.0.0-*",
-        "Microsoft.Framework.Runtime.Common": { "version": "1.0.0-*", "type": "build" }
+        "Microsoft.Framework.Runtime.Compilation": "1.0.0-*",
+        "Microsoft.Framework.Runtime.Roslyn.Common": "1.0.0-*"
     },
 
     "frameworks" : {

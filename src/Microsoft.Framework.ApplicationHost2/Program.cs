@@ -67,8 +67,14 @@ namespace Microsoft.Framework.ApplicationHost
                     NuGetFramework.Parse(_environment.RuntimeFramework.FullName),
                     _serviceProvider);
 
-                // Configure compilation
-                builder.Loaders.Insert(0, new ProjectAssemblyLoaderFactory());
+                // Configure assembly loading
+                builder.Loaders.Add(new ProjectAssemblyLoaderFactory(
+                    new LibraryExporter(
+                        builder.Services,
+                        _loadContextAccessor,
+                        builder.TargetFramework, 
+                        builder.PackagePathResolver)));
+                builder.Loaders.Add(new PackageAssemblyLoaderFactory(builder.PackagePathResolver));
 
                 if(builder.Project == null)
                 {
@@ -156,6 +162,7 @@ namespace Microsoft.Framework.ApplicationHost
         {
             var app = new CommandLineApplication(throwOnUnexpectedArg: false);
             app.Name = typeof(Program).Namespace;
+
             var optionWatch = app.Option("--watch", "Watch file changes", CommandOptionType.NoValue);
             var optionPackages = app.Option("--packages <PACKAGE_DIR>", "Directory containing packages",
                 CommandOptionType.SingleValue);
@@ -166,7 +173,6 @@ namespace Microsoft.Framework.ApplicationHost
             app.HelpOption("-?|-h|--help");
             app.VersionOption("--version", GetVersion);
             var runCmd = app.Command("run", c =>
-
             {
                 // We don't actually execute "run" command here
                 // We are adding this command for the purpose of displaying correct help information

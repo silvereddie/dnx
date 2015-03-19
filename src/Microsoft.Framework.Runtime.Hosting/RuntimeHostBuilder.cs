@@ -24,10 +24,11 @@ namespace Microsoft.Framework.Runtime
         public LockFile LockFile { get; set;  }
         public GlobalSettings GlobalSettings { get; set; }
         public IServiceProvider Services { get; set; }
+        public PackagePathResolver PackagePathResolver { get; set; }
 
         /// <summary>
         /// Create a <see cref="RuntimeHostBuilder"/> for the project in the specified
-        /// <paramref name="projectDirectory"/>.
+        /// <paramref name="projectDirectory"/>, using the default configuration.
         /// </summary>
         /// <remarks>
         /// This method will throw if the project.json file cannot be found in the
@@ -67,10 +68,12 @@ namespace Microsoft.Framework.Runtime
                 hostBuilder.LockFile = lockFile;
             }
 
-            // Set the framework
+            // Set the framework and other components
             hostBuilder.TargetFramework = runtimeFramework;
-
             hostBuilder.Services = services;
+            hostBuilder.PackagePathResolver = new PackagePathResolver(
+                ResolveRepositoryPath(hostBuilder.GlobalSettings), 
+                GetCachePaths());
 
             log.LogVerbose("Registering PackageSpecReferenceDependencyProvider");
             hostBuilder.DependencyProviders.Add(new PackageSpecReferenceDependencyProvider(projectResolver));
@@ -86,11 +89,6 @@ namespace Microsoft.Framework.Runtime
             hostBuilder.DependencyProviders.Add(new ReferenceAssemblyDependencyProvider(referenceResolver));
 
             // GAC resolver goes here! :)
-
-            // Add assembly loaders
-            hostBuilder.Loaders.Add(new PackageAssemblyLoaderFactory(
-                new PackagePathResolver(ResolveRepositoryPath(hostBuilder.GlobalSettings)), 
-                GetCacheResolvers()));
 
             return hostBuilder;
         }
@@ -134,17 +132,16 @@ namespace Microsoft.Framework.Runtime
             return Path.Combine(profileDirectory, Constants.DefaultLocalRuntimeHomeDir, "packages");
         }
 
-        private static IEnumerable<PackagePathResolver> GetCacheResolvers()
+        private static IEnumerable<string> GetCachePaths()
         {
             var packageCachePathValue = Environment.GetEnvironmentVariable(EnvironmentNames.PackagesCache);
 
             if (string.IsNullOrEmpty(packageCachePathValue))
             {
-                return Enumerable.Empty<PackagePathResolver>();
+                return Enumerable.Empty<string>();
             }
 
-            return packageCachePathValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(path => new PackagePathResolver(path));
+            return packageCachePathValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private static string GetProjectName(string projectDirectory)

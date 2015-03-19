@@ -2,7 +2,7 @@
 
 namespace Microsoft.Framework.Runtime.Compilation
 {
-    internal class MetadataFileReference : IMetadataReference
+    public class MetadataFileReference : IMetadataFileReference
     {
         public MetadataFileReference(string name, string path)
         {
@@ -12,5 +12,10 @@ namespace Microsoft.Framework.Runtime.Compilation
 
         public string Name { get; }
         public string Path { get; }
+
+        public override string ToString()
+        {
+            return "Metadata: " + Path;
+        }
     }
 }

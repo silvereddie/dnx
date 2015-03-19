@@ -29,9 +29,9 @@ namespace Microsoft.Framework.Runtime.Loader
         public IAssemblyLoader Create(NuGetFramework runtimeFramework, IAssemblyLoadContextAccessor loadContextAccessor, DependencyManager dependencies)
         {
             return new PackageAssemblyLoader(
-                runtimeFramework, 
-                loadContextAccessor, 
-                dependencies.GetLibraries(LibraryTypes.Package), 
+                runtimeFramework,
+                loadContextAccessor,
+                dependencies.GetLibraries(LibraryTypes.Package),
                 _packagePathResolver);
         }
     }
@@ -73,17 +73,17 @@ namespace Microsoft.Framework.Runtime.Loader
 
         private Assembly Load(string name, IAssemblyLoadContext loadContext)
         {
-            using (Log.LogTimedMethod())
+            string assemblyLocation;
+            if (_assemblyLookupTable.TryGetValue(name, out assemblyLocation))
             {
-                Log.LogVerbose($"Requested load of {name}");
-
-                string assemblyLocation;
-                if (_assemblyLookupTable.TryGetValue(name, out assemblyLocation))
+                using (Log.LogTimedMethod())
                 {
+                    Log.LogVerbose($"Requested load of {name}");
+
                     return loadContext.LoadFile(assemblyLocation);
                 }
-                return null;
             }
+            return null;
         }
 
         private Dictionary<string, string> InitializeAssemblyLookupTable(IEnumerable<Library> libraries, NuGetFramework runtimeFramework, PackagePathResolver pathResolver)

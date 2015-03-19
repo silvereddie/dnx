@@ -49,6 +49,13 @@ namespace Microsoft.Framework.Runtime.Roslyn
             IEnumerable<IMetadataReference> incomingReferences,
             IEnumerable<ISourceReference> incomingSourceReferences)
         {
+            /****************************************************************************
+             * STOP STOP STOP STOP STOP STOP STOP STOP STOP STOP STOP STOP STOP STOP    *
+             * This code is for the old runtime and has been moved to                   * 
+             * Microsoft.Framework.Runtime.Compilation.Roslyn.CSharpProjectCompiler.    * 
+             * Please ensure any changes you make here are mirrored there               *
+             ****************************************************************************/
+
             var path = project.ProjectDirectory;
             var name = project.Name;
 
