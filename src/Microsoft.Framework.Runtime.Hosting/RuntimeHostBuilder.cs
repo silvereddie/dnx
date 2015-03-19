@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Framework.Logging;
 using Microsoft.Framework.Runtime.Dependencies;
 using Microsoft.Framework.Runtime.Internal;
@@ -17,6 +18,7 @@ namespace Microsoft.Framework.Runtime
     public class RuntimeHostBuilder
     {
         public IList<IDependencyProvider> DependencyProviders { get; } = new List<IDependencyProvider>();
+        public IList<IAssemblyLoaderFactory> Loaders { get; } = new List<IAssemblyLoaderFactory>();
         public NuGetFramework TargetFramework { get; set; }
         public Project Project { get; set; }
         public LockFile LockFile { get; set;  }
@@ -30,7 +32,7 @@ namespace Microsoft.Framework.Runtime
         /// <remarks>
         /// This method will throw if the project.json file cannot be found in the
         /// specified folder. If a project.lock.json file is present in the directory
-        /// it will be loaded. 
+        /// it will be loaded.
         /// </remarks>
         /// <param name="projectDirectory">The directory of the project to host</param>
         public static RuntimeHostBuilder ForProjectDirectory(string projectDirectory, NuGetFramework runtimeFramework, IServiceProvider services)
@@ -85,6 +87,11 @@ namespace Microsoft.Framework.Runtime
 
             // GAC resolver goes here! :)
 
+            // Add assembly loaders
+            hostBuilder.Loaders.Add(new PackageAssemblyLoaderFactory(
+                new PackagePathResolver(ResolveRepositoryPath(hostBuilder.GlobalSettings)), 
+                GetCacheResolvers()));
+
             return hostBuilder;
         }
 
@@ -95,6 +102,49 @@ namespace Microsoft.Framework.Runtime
         public RuntimeHost Build()
         {
             return new RuntimeHost(this);
+        }
+
+        private static string ResolveRepositoryPath(GlobalSettings globalSettings)
+        {
+            // Order
+            // 1. EnvironmentNames.Packages environment variable
+            // 2. global.json { "packages": "..." }
+            // 3. NuGet.config repositoryPath (maybe)?
+            // 4. {DefaultLocalRuntimeHomeDir}\packages
+
+            var runtimePackages = Environment.GetEnvironmentVariable(EnvironmentNames.Packages);
+
+            if (!string.IsNullOrEmpty(runtimePackages))
+            {
+                return runtimePackages;
+            }
+
+            if (!string.IsNullOrEmpty(globalSettings?.PackagesPath))
+            {
+                return Path.Combine(globalSettings.RootPath, globalSettings.PackagesPath);
+            }
+
+            var profileDirectory = Environment.GetEnvironmentVariable("USERPROFILE");
+
+            if (string.IsNullOrEmpty(profileDirectory))
+            {
+                profileDirectory = Environment.GetEnvironmentVariable("HOME");
+            }
+
+            return Path.Combine(profileDirectory, Constants.DefaultLocalRuntimeHomeDir, "packages");
+        }
+
+        private static IEnumerable<PackagePathResolver> GetCacheResolvers()
+        {
+            var packageCachePathValue = Environment.GetEnvironmentVariable(EnvironmentNames.PackagesCache);
+
+            if (string.IsNullOrEmpty(packageCachePathValue))
+            {
+                return Enumerable.Empty<PackagePathResolver>();
+            }
+
+            return packageCachePathValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(path => new PackagePathResolver(path));
         }
 
         private static string GetProjectName(string projectDirectory)

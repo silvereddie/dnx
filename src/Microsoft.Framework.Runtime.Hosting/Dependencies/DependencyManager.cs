@@ -22,7 +22,7 @@ namespace Microsoft.Framework.Runtime.Dependencies
         private readonly Dictionary<string, IList<Library>> _librariesByType = new Dictionary<string, IList<Library>>();
 
         private DependencyManager(
-            GraphNode<Library> graph, 
+            GraphNode<Library> graph,
             Dictionary<string, IList<Library>> librariesByType)
         {
             _graph = graph;

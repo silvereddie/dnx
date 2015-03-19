@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,7 +12,9 @@ using Microsoft.Framework.Logging;
 using Microsoft.Framework.Logging.Console;
 using Microsoft.Framework.Runtime;
 using Microsoft.Framework.Runtime.Common.CommandLine;
+using Microsoft.Framework.Runtime.Compilation;
 using Microsoft.Framework.Runtime.Internal;
+using Microsoft.Framework.Runtime.Loader;
 using NuGet.Frameworks;
 
 namespace Microsoft.Framework.ApplicationHost
@@ -33,7 +36,6 @@ namespace Microsoft.Framework.ApplicationHost
 
         public Task<int> Main(string[] args)
         {
-
             ILogger log = null;
             try
             {
@@ -64,6 +66,10 @@ namespace Microsoft.Framework.ApplicationHost
                     options.ApplicationBaseDirectory,
                     NuGetFramework.Parse(_environment.RuntimeFramework.FullName),
                     _serviceProvider);
+
+                // Configure compilation
+                builder.Loaders.Insert(0, new ProjectAssemblyLoaderFactory());
+
                 if(builder.Project == null)
                 {
                     // Failed to load the project
@@ -112,6 +118,8 @@ namespace Microsoft.Framework.ApplicationHost
                 return Task.FromResult(1);
             }
         }
+
+
 
         private ILoggerFactory ConfigureLogging()
         {

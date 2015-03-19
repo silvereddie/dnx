@@ -12,6 +12,7 @@
     "code": [
         "**/*.cs",
         "../Microsoft.Framework.Runtime.Hosting/**/*.cs",
+        "../Microsoft.Framework.Runtime.Compilation/**/*.cs",
         "../../submodules/FileSystem/src/Microsoft.Framework.FileSystemGlobbing/**/*.cs",
         "../../submodules/NuGet.Versioning/src/NuGet.Versioning/**/*.cs",
         "../../submodules/NuGet.Packaging/src/NuGet.Frameworks/**/*.cs",
