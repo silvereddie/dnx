@@ -123,17 +123,6 @@ namespace Microsoft.Framework.Runtime.FunctionalTests.ProjectFileGlobbing
         }
 
         [Fact]
-        public void DefaultSearchPathForContents()
-        {
-            var testFilesCollection = CreateFilesCollection(@"{}", "src\\project");
-            VerifyFilePathsCollection(testFilesCollection.ContentFiles,
-                @"src\project\content1.txt",
-                @"src\project\compiler\preprocess\sub\sub\preprocess-source3.txt",
-                @"src\project\compiler\shared\shared1.txt",
-                @"src\project\compiler\shared\sub\shared2.txt");
-        }
-
-        [Fact]
         public void DefaultSearchPathForResources()
         {
             var testFilesCollection = CreateFilesCollection(@"{}", "src\\project");
