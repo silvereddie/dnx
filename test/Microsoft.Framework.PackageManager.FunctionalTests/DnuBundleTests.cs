@@ -453,11 +453,13 @@ exec ""{2}{3}"" --appbase ""${0}"" Microsoft.Framework.ApplicationHost {4} ""$@"
       'PROJECT_NAME': {
         '.': ['project.json', 'project.lock.json'],
         'MixFolder1': {
+          '.': ['uselessfile1.txt', 'uselessfile2'],
           'UsefulSub': ['useful.txt', 'useful']
         },
         'MixFolder2': {
+          '.': ['uselessfile1.txt', 'uselessfile2'],
           'UsefulSub': ['useful.txt', 'useful']
-        }
+        },
       }
     }
   }
@@ -471,8 +473,6 @@ exec ""{2}{3}"" --appbase ""${0}"" Microsoft.Framework.ApplicationHost {4} ""$@"
     ""UselessFolder1\\**"",
     ""UselessFolder2/**/*"",
     ""UselessFolder3\\**/*.*"",
-    ""MixFolder1\\*"",
-    ""MixFolder2/*.*""
   ]
 }")
                     .WriteTo(testEnv.ProjectPath);
@@ -497,8 +497,6 @@ exec ""{2}{3}"" --appbase ""${0}"" Microsoft.Framework.ApplicationHost {4} ""$@"
     ""UselessFolder1\\**"",
     ""UselessFolder2/**/*"",
     ""UselessFolder3\\**/*.*"",
-    ""MixFolder1\\*"",
-    ""MixFolder2/*.*""
   ]
 }")
                     .WithFileContents(Path.Combine("approot", "src", testEnv.ProjectName, "project.lock.json"),

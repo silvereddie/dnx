@@ -247,7 +247,7 @@ namespace Microsoft.Framework.PackageManager.Bundle
             var wwwRootPath = string.Empty;
             if (!string.IsNullOrEmpty(WwwRoot))
             {
-                wwwRootPath = Path.Combine(project.ProjectDirectory, WwwRoot);
+                wwwRootPath = Path.GetFullPath(Path.Combine(project.ProjectDirectory, WwwRoot));
                 wwwRootPath = PathUtility.EnsureTrailingSlash(wwwRootPath);
             }
 
