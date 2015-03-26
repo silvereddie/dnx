@@ -39,7 +39,8 @@ namespace Microsoft.Framework.PackageManager
                     // partially written package contents. To avoid this we'll extract the package to a sibling directory and Move it 
                     // to the target path.
                     var extractPath = Path.Combine(Path.GetDirectoryName(targetPath), Path.GetRandomFileName());
-                    Directory.CreateDirectory(extractPath);
+                    var targetDirectory = new DirectoryInfo(extractPath);
+                    targetDirectory.Create();
                     targetNupkg = Path.Combine(extractPath, Path.GetFileName(targetNupkg));
                     using (var nupkgStream = new FileStream(targetNupkg, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete))
                     {
@@ -47,8 +48,8 @@ namespace Microsoft.Framework.PackageManager
                         nupkgStream.Seek(0, SeekOrigin.Begin);
 
                         ExtractPackage(extractPath, nupkgStream);
-                        Directory.Move(extractPath, targetPath);
                     }
+                    targetDirectory.MoveTo(targetPath);
 
                     // Fixup the casing of the nuspec on disk to match what we expect
                     var nuspecFile = Directory.EnumerateFiles(targetPath, "*" + NuGet.Constants.ManifestExtension).Single();
