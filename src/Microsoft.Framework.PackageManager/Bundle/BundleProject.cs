@@ -262,7 +262,7 @@ namespace Microsoft.Framework.PackageManager.Bundle
                 addtionalExcluding.Add(wwwRootPath.Substring(PathUtility.EnsureTrailingSlash(project.ProjectDirectory).Length));
             }
 
-            var sourceFiles = project.Files.GetFilesForBunding(includeSource, addtionalExcluding);
+            var sourceFiles = project.Files.GetFilesForBundling(includeSource, addtionalExcluding);
             root.Operations.Copy(sourceFiles, project.ProjectDirectory, targetPath);
         }
 

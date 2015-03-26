@@ -20,6 +20,11 @@ namespace Microsoft.Framework.PackageManager.Bundle
 
         public void Copy(IEnumerable<string> sourceFiles, string sourceDirectory, string targetDirectory)
         {
+            if (sourceFiles == null)
+            {
+                throw new ArgumentNullException(nameof(sourceFiles));
+            }
+
             sourceDirectory = PathUtility.EnsureTrailingSlash(sourceDirectory);
             targetDirectory = PathUtility.EnsureTrailingSlash(targetDirectory);
 

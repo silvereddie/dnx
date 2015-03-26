@@ -82,7 +82,7 @@ namespace Microsoft.Framework.Runtime
             get { return _sharedPatternsGroup.SearchFiles(_projectDirectory).Distinct(); }
         }
 
-        public IEnumerable<string> GetFilesForBunding(bool includeSource, IEnumerable<string> additionalExcludePatterns)
+        public IEnumerable<string> GetFilesForBundling(bool includeSource, IEnumerable<string> additionalExcludePatterns)
         {
             var patternGroup = new PatternGroup(ContentPatternsGroup.IncludePatterns,
                                                 ContentPatternsGroup.ExcludePatterns.Concat(additionalExcludePatterns),
