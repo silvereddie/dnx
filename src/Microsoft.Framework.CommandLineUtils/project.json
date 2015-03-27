@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "version": "1.0.0-*",
     "compilationOptions" : { "define" : ["TRACE"], "warningsAsErrors": true },
     "shared": "**/*.cs",
@@ -10,5 +11,23 @@
                 "System.Runtime": "4.0.20-beta-*"
             }
         }
+=======
+  "version": "1.0.0-beta3",
+  "compilationOptions": {
+    "define": [
+      "TRACE"
+    ],
+    "warningsAsErrors": true
+  },
+  "shared": "**/*.cs",
+  "frameworks": {
+    "aspnet50": {},
+    "aspnetcore50": {
+      "dependencies": {
+        "System.Collections": "4.0.10-beta-22605",
+        "System.Runtime": "4.0.20-beta-22605"
+      }
+>>>>>>> upstream/master
     }
+  }
 }

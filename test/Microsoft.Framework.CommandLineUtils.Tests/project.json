@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "dependencies": {
         "Microsoft.Framework.CommandLineUtils": "1.0.0-*",
         "xunit.runner.aspnet": "2.0.0-aspnet-*"
@@ -13,3 +14,17 @@
         "test": "xunit.runner.aspnet"
     }
 }
+=======
+  "dependencies": {
+    "Microsoft.Framework.CommandLineUtils": "1.0.0-beta3",
+    "xunit.runner.kre": "1.0.0-beta3"
+  },
+  "frameworks": {
+    "aspnet50": {}
+  },
+  "commands": {
+    "run": "xunit.runner.kre",
+    "test": "xunit.runner.kre"
+  }
+}
+>>>>>>> upstream/master

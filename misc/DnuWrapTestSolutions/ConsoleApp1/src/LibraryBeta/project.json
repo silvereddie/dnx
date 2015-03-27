@@ -1,3 +1,4 @@
+<<<<<<< HEAD:misc/DnuWrapTestSolutions/ConsoleApp1/src/LibraryBeta/project.json
 {
     "version": "1.0.0-*",
     "dependencies": {
@@ -6,3 +7,10 @@
     "frameworks" : {
     }
 }
+=======
+{
+  "version": "1.0.0-beta3",
+  "dependencies": {},
+  "frameworks": {}
+}
+>>>>>>> upstream/master:misc/KpmWrapTestSolutions/ConsoleApp1/src/LibraryBeta/project.json

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "dependencies": {
         "Microsoft.Framework.FunctionalTestUtils": "1.0.0-*",
         "Microsoft.Framework.PackageManager": "1.0.0-*",
@@ -13,3 +14,17 @@
         "test": "xunit.runner.aspnet"
     }
 }
+=======
+  "dependencies": {
+    "Microsoft.Framework.PackageManager": "1.0.0-beta3",
+    "Microsoft.Framework.Runtime.Common": "1.0.0-beta3",
+    "xunit.runner.kre": "1.0.0-beta3"
+  },
+  "frameworks": {
+    "aspnet50": {}
+  },
+  "commands": {
+    "test": "xunit.runner.kre"
+  }
+}
+>>>>>>> upstream/master

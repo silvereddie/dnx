@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD:test/Microsoft.Framework.ApplicationHost.FunctionalTests/project.json
     "dependencies": {
         "Bootstrapper.FunctionalTests": "1.0.0-*",
         "Microsoft.Framework.FunctionalTestUtils": "1.0.0-*",
@@ -14,3 +15,17 @@
         "test": "xunit.runner.aspnet"
     }
 }
+=======
+  "dependencies": {
+    "Microsoft.Framework.FunctionalTestUtils": "1.0.0-*",
+    "Microsoft.Framework.Runtime.Common": "1.0.0-beta3",
+    "xunit.runner.kre": "1.0.0-beta3"
+  },
+  "frameworks": {
+    "aspnet50": {}
+  },
+  "commands": {
+    "test": "xunit.runner.kre"
+  }
+}
+>>>>>>> upstream/master:test/Microsoft.Framework.PackageManager.FunctionalTests/Project.json
