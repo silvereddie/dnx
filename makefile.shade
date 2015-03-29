@@ -62,6 +62,7 @@ var MANAGED_PROJECTS = '${FindAllProjects(
     "Microsoft.Framework.Runtime",
     "Microsoft.Framework.Runtime.Caching",
     "Microsoft.Framework.Runtime.Interfaces",
+    "Microsoft.Framework.Runtime.Compilation.DesignTime",
     "Microsoft.Framework.Runtime.Common",
     "Microsoft.Framework.Runtime.Loader",
     "Microsoft.Framework.Runtime.Roslyn",
@@ -498,6 +499,7 @@ var RC_FILES = '${FindAllFiles("Resource.rc", BOOTSTRAPPER_EXE_NAME, BOOTSTRAPPE
         {
             "Microsoft.Framework.Runtime.Roslyn",
             "Microsoft.Framework.ApplicationHost",
+            "Microsoft.Framework.Runtime.Compilation.DesignTime",
             BOOTSTRAPPER_HOST_NAME, 
             BOOTSTRAPPER_CORECLR_MANAGED_NAME 
         };
@@ -568,7 +570,9 @@ var RC_FILES = '${FindAllFiles("Resource.rc", BOOTSTRAPPER_EXE_NAME, BOOTSTRAPPE
             // copy required CoreCLR assemblies
             if (target.Framework == "dnxcore50")
             {
-                foreach (var file in Directory.GetFiles(coreclrFolder).Where(f => Path.GetFileName(f).Equals("System.Private.DataContractSerialization.dll") || !Path.GetFileName(f).StartsWith("System")))
+                var assemblyExceptions = new[] { "System.Private.DataContractSerialization.dll", "System.Private.Networking.dll" };
+				
+                foreach (var file in Directory.GetFiles(coreclrFolder).Where(filePath => !Path.GetFileName(filePath).StartsWith("System") || assemblyExceptions.Contains(Path.GetFileName(filePath), StringComparer.Ordinal)))
                 {
                     var targetFilePath = Path.Combine(target.TargetFolder, Path.GetFileName(file));
                     Log.Info("Copying " + file + " to " + targetFilePath);
